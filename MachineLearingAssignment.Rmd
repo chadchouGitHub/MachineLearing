@@ -40,7 +40,10 @@ confusionMatrix(cv_predictions,cvData$classe)
 ```
 
 ```{r}
-
+pmlTest <- read.csv("pml-testing.csv", na.strings=c("NA",""))
+testData<-pmlTest[,names(pmlTest)%in%names(trainDataFull)]
+predictions<-predict(modelFit,testData)
+predictions
 ```
 
 
