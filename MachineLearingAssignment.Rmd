@@ -29,8 +29,18 @@ cvData<-trainDataFull[-inTrain,]
 
 
 
-```{r, echo=FALSE}
+```{r}
+modelFit<-train(trainData[,-53],trainData$classe,method="rf",trControl=trainControl(method="oob",number=4,allowParallel=TRUE))
+modelFit
+```
+
+```{r}
 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+
+```
+
+
+
