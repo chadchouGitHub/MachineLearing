@@ -35,7 +35,8 @@ modelFit
 ```
 
 ```{r}
-
+cv_predictions<-predict(modelFit,cvData[,-53])
+confusionMatrix(cv_predictions,cvData$classe)
 ```
 
 ```{r}
