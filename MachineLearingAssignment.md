@@ -3,28 +3,39 @@ Chia-Ching Chou
 November 23, 2014  
 Prediction Assignment Writeup
 
+#
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
 
 
 ```r
-summary(cars)
+library(caret)
 ```
 
 ```
-##      speed           dist    
-##  Min.   : 4.0   Min.   :  2  
-##  1st Qu.:12.0   1st Qu.: 26  
-##  Median :15.0   Median : 36  
-##  Mean   :15.4   Mean   : 43  
-##  3rd Qu.:19.0   3rd Qu.: 56  
-##  Max.   :25.0   Max.   :120
+## Warning: package 'caret' was built under R version 3.1.2
 ```
 
-You can also embed plots, for example:
+```
+## Loading required package: lattice
+## Loading required package: ggplot2
+```
 
-![plot of chunk unnamed-chunk-2](./MachineLearingAssignment_files/figure-html/unnamed-chunk-2.png) 
+```r
+#read trainning data and remove missing values
+inTrainData <- read.csv("pml-training.csv",na.strings=c("NA",""))
+missingVals<-apply(inTrainData,2, function (x) {sum (is.na(x))})
+tr_temp<-inTrainData[,missingVals==0]
+trainDataFull<-tr_temp[,-(1:7)]
+#data splitting with 70% for traning data and 30% for cross validation.
+inTrain<-createDataPartition(y=trainDataFull$classe,p=0.7,list=FALSE)
+trainData<-trainDataFull[inTrain,]
+cvData<-trainDataFull[-inTrain,]
+```
+
+
+
+
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
