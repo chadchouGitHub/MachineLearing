@@ -37,6 +37,7 @@ trainDataFull<-tr_temp[,-(1:7)]
 ```
 
 Data splitting with for traning data and cross validation (7:3).
+Apply creatDataPartition function from caret package.
 
 ```r
 inTrain<-createDataPartition(y=trainDataFull$classe,p=0.7,list=FALSE)
@@ -45,7 +46,9 @@ cvData<-trainDataFull[-inTrain,]
 ```
 
 #Model
+apply train function from caret library
 Use "rf" model
+(Need to install e1071 package. I don't know why need e1071 package. It didn't install with caret package.)
 
 
 ```r
@@ -74,14 +77,15 @@ modelFit
 ## 
 ##   mtry  Accuracy  Kappa 
 ##    2    0.9925    0.9905
-##   27    0.9924    0.9903
-##   52    0.9870    0.9836
+##   27    0.9929    0.9911
+##   52    0.9884    0.9854
 ## 
 ## Accuracy was used to select the optimal model using  the largest value.
-## The final value used for the model was mtry = 2.
+## The final value used for the model was mtry = 27.
 ```
 
 #Validation
+Cross validation.
 
 
 ```r
@@ -94,37 +98,37 @@ confusionMatrix(cv_predictions,cvData$classe)
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1668    9    0    0    0
-##          B    3 1127   10    0    0
-##          C    0    3 1015   16    2
-##          D    0    0    1  946    2
-##          E    3    0    0    2 1078
+##          A 1672    7    0    0    0
+##          B    1 1132    9    0    0
+##          C    0    0 1015   16    4
+##          D    0    0    2  948    0
+##          E    1    0    0    0 1078
 ## 
 ## Overall Statistics
 ##                                         
-##                Accuracy : 0.991         
-##                  95% CI : (0.989, 0.994)
+##                Accuracy : 0.993         
+##                  95% CI : (0.991, 0.995)
 ##     No Information Rate : 0.284         
 ##     P-Value [Acc > NIR] : <2e-16        
 ##                                         
-##                   Kappa : 0.989         
+##                   Kappa : 0.991         
 ##  Mcnemar's Test P-Value : NA            
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             0.996    0.989    0.989    0.981    0.996
-## Specificity             0.998    0.997    0.996    0.999    0.999
-## Pos Pred Value          0.995    0.989    0.980    0.997    0.995
-## Neg Pred Value          0.999    0.997    0.998    0.996    0.999
+## Sensitivity             0.999    0.994    0.989    0.983    0.996
+## Specificity             0.998    0.998    0.996    1.000    1.000
+## Pos Pred Value          0.996    0.991    0.981    0.998    0.999
+## Neg Pred Value          1.000    0.999    0.998    0.997    0.999
 ## Prevalence              0.284    0.194    0.174    0.164    0.184
-## Detection Rate          0.283    0.192    0.172    0.161    0.183
-## Detection Prevalence    0.285    0.194    0.176    0.161    0.184
-## Balanced Accuracy       0.997    0.993    0.992    0.990    0.998
+## Detection Rate          0.284    0.192    0.172    0.161    0.183
+## Detection Prevalence    0.285    0.194    0.176    0.161    0.183
+## Balanced Accuracy       0.999    0.996    0.993    0.991    0.998
 ```
 
 #Test
-
+Loading testing data, and test with prediction function with modelFit variable from train() function results.
 
 ```r
 pmlTest <- read.csv("pml-testing.csv", na.strings=c("NA",""))

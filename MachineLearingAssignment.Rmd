@@ -29,6 +29,7 @@ trainDataFull<-tr_temp[,-(1:7)]
 ```
 
 Data splitting with for traning data and cross validation (7:3).
+Apply creatDataPartition function from caret package.
 ```{r}
 inTrain<-createDataPartition(y=trainDataFull$classe,p=0.7,list=FALSE)
 trainData<-trainDataFull[inTrain,]
@@ -37,7 +38,9 @@ cvData<-trainDataFull[-inTrain,]
 ```
 
 #Model
+apply train function from caret library
 Use "rf" model
+(Need to install e1071 package. I don't know why need e1071 package. It didn't install with caret package.)
 
 ```{r}
 modelFit<-train(trainData[,-53],trainData$classe,method="rf",trControl=trainControl(method="oob",number=4,allowParallel=TRUE))
@@ -45,6 +48,7 @@ modelFit
 ```
 
 #Validation
+Cross validation.
 
 ```{r}
 cv_predictions<-predict(modelFit,cvData[,-53])
@@ -52,7 +56,7 @@ confusionMatrix(cv_predictions,cvData$classe)
 ```
 
 #Test
-
+Loading testing data, and test with prediction function with modelFit variable from train() function results.
 ```{r}
 pmlTest <- read.csv("pml-testing.csv", na.strings=c("NA",""))
 testData<-pmlTest[,names(pmlTest)%in%names(trainDataFull)]
