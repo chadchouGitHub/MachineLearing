@@ -8,11 +8,17 @@ output:
 ---
 Prediction Assignment Writeup
 
-#
+#Instroduction:
+
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their
+behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways
 
 
+#Data
+The data for this project come from this source: http://groupware.les.inf.puc-rio.br/har (http://groupware.les.inf.pucrio.br/har).
 
-
+#Process Data
+Read trainning data and clean missing data.
 ```{r}
 library(caret)
 #read trainning data and remove missing values
@@ -20,24 +26,32 @@ inTrainData <- read.csv("pml-training.csv",na.strings=c("NA",""))
 missingVals<-apply(inTrainData,2, function (x) {sum (is.na(x))})
 tr_temp<-inTrainData[,missingVals==0]
 trainDataFull<-tr_temp[,-(1:7)]
-#data splitting with 70% for traning data and 30% for cross validation.
+```
+
+Data splitting with for traning data and cross validation (7:3).
+```{r}
 inTrain<-createDataPartition(y=trainDataFull$classe,p=0.7,list=FALSE)
 trainData<-trainDataFull[inTrain,]
 cvData<-trainDataFull[-inTrain,]
 
 ```
 
-
+#Model
+Use "rf" model
 
 ```{r}
 modelFit<-train(trainData[,-53],trainData$classe,method="rf",trControl=trainControl(method="oob",number=4,allowParallel=TRUE))
 modelFit
 ```
 
+#Validation
+
 ```{r}
 cv_predictions<-predict(modelFit,cvData[,-53])
 confusionMatrix(cv_predictions,cvData$classe)
 ```
+
+#Test
 
 ```{r}
 pmlTest <- read.csv("pml-testing.csv", na.strings=c("NA",""))
